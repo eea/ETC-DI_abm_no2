@@ -105,6 +105,9 @@ processed_all_agents = set()
 
 plans_generator = matsim.plan_reader(base_folder + plans_path)
 
+# print("Looping through agents, filtering at attribute -home- and -work-")
+print("Looping through agents, filtering at attribute  : home")
+print("Limiting to agents within city limits")
 for person, plan in plans_generator:
     agent_id = person.attrib.get('id')
 
@@ -116,12 +119,13 @@ for person, plan in plans_generator:
     for item in plan:
         if item.tag == 'activity':
             activity_type = item.attrib.get('type', '').lower()
-            # print(f"Activity name : {activity_type} with agent_id  {agent_id}")
+            print(f"Activity name : {activity_type} with agent_id  {agent_id}")
             if 'home' in activity_type:
                 try:
                     home_x = float(item.attrib['x'])
                     home_y = float(item.attrib['y'])
-
+                    link   = item.attrib.get("link")
+                    
                     # Fast transform
                     home_x_proj, home_y_proj = transformer.transform(home_x, home_y)
                     home_reprojected_point = Point(home_x_proj, home_y_proj)
@@ -129,13 +133,14 @@ for person, plan in plans_generator:
                     if berlin_geometry.contains(home_reprojected_point):
                        berlin_home_locations.append({
                             'agent_id': agent_id,
+                            'link_id': link,
                             'x_home_matsim': home_x,
                             'y_home_matsim': home_y,
                             'home_geometry': home_reprojected_point
                         })
                        break  # Done with this agent
                 except Exception as e:
-                    print(f"Error for agent {agent_id}: {e}")
+                    print(f"Error for home agent {agent_id}: {e}")
                 break  # Whether success or fail, don’t keep checking activities
                 
             if 'work' in activity_type:
@@ -148,21 +153,22 @@ for person, plan in plans_generator:
                     work_reprojected_point = Point(work_x_proj, work_y_proj)
 
                     if berlin_geometry.contains(work_reprojected_point):
-                       berlin_work_locations.append({
-                            'agent_id': agent_id,
-                            'x_work_matsim': work_x,
-                            'y_work_matsim': work_y,
-                            'work_geometry': work_reprojected_point
-                        })
+                        berlin_work_locations.append({
+                             'agent_id': agent_id,
+                             'link_id': link,
+                             'x_work_matsim': work_x,
+                             'y_work_matsim': work_y,
+                             'work_geometry': work_reprojected_point
+                         })
                        break  # Done with this agent
                 except Exception as e:
-                    print(f"Error for agent {agent_id}: {e}")
+                    print(f"Error for work agent {agent_id}: {e}")
                 break  # Whether success or fail, don’t keep checking activities
                 
 print(f"The Matsim pouints coordinates were reprojected to the {berlin_outline_gdf.crs}")
 print(f"Total number of agents in the scenario: {len(processed_all_agents)}")
 print(f"Number of agents with home locations within Berlin : {len(berlin_home_locations)}")
-print(f"Number of agents with work locations within Berlin : {len(berlin_work_locations)}")
+# print(f"Number of agents with work locations within Berlin : {len(berlin_work_locations)}")
 
 # activity_types = set()
 
@@ -187,12 +193,12 @@ berlin_home_locations_df = pd.DataFrame(berlin_home_locations)
 berlin_home_locations_df.to_csv(base_folder+agents_in_berlin_output_path, index=False)
 print(f"DataFrame exported to csv: {base_folder+agents_in_berlin_output_path}")
 
-# prompt: export the agent_homes_df to csv
-agents_in_berlin_output_path = "berlin_output/agents_berlin_citylim_work.csv"
+# # prompt: export the agent_homes_df to csv
+# agents_in_berlin_output_path = "berlin_output/agents_berlin_citylim_work.csv"
 
-# Convert the list of dictionaries to a pandas DataFrame
-berlin_work_locations_df = pd.DataFrame(berlin_work_locations)
+# # Convert the list of dictionaries to a pandas DataFrame
+# berlin_work_locations_df = pd.DataFrame(berlin_work_locations)
 
-# Now call .to_csv() on the DataFrame
-berlin_work_locations_df.to_csv(base_folder+agents_in_berlin_output_path, index=False)
-print(f"DataFrame exported to csv: {base_folder+agents_in_berlin_output_path}")
+# # Now call .to_csv() on the DataFrame
+# berlin_work_locations_df.to_csv(base_folder+agents_in_berlin_output_path, index=False)
+# print(f"DataFrame exported to csv: {base_folder+agents_in_berlin_output_path}")

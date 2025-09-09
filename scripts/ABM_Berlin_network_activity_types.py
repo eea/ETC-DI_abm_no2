@@ -57,10 +57,22 @@ processed_all_agents = set()
 
 nets_generator = matsim.read_network(base_folder + network_path)
 
+# prompt: export the agent_homes_df to csv
+network_berlin_output_path = "berlin_output/network_berlin.csv"
+
+# Convert the list of dictionaries to a pandas DataFrame
+network_berlin_df = nets_generator.links
+# Now call .to_csv() on the DataFrame
+network_berlin_df.to_csv(base_folder+network_berlin_output_path, index=False)
+print(f"DataFrame exported to csv: {base_folder+network_berlin_output_path}")
+
+
 activity_types = set()
+
 
 for person, plan in nets_generator:
     for item in plan:
+        45
         if item.tag == 'activity':
             activity_type = item.attrib.get('type')
             if activity_type:

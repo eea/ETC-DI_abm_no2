@@ -55,12 +55,14 @@ berlin_home_locations = []
 berlin_work_locations = []
 processed_all_agents = set()
 
-plans_generator = matsim.plan_reader(base_folder + plans_path)
+plans_generator = matsim.plan_reader(base_folder + plans_path, selected_plans_only = True)
 
 activity_types = set()
+# activities = set()
 
 for person, plan in plans_generator:
     for item in plan:
+        45
         if item.tag == 'activity':
             activity_type = item.attrib.get('type')
             if activity_type:
@@ -69,3 +71,28 @@ for person, plan in plans_generator:
 print("Unique activity types found in the plans file:")
 for activity_type in sorted(activity_types):
     print(f" - {activity_type}")
+
+
+# plans = matsim.plan_reader('output_plans.xml.gz', selected_plans_only = True)
+
+# Each plan is returned as a tuple with its owning person (for now, is this ok?)
+# - The name of the element is in its .tag (e.g. 'plan', 'leg', 'route', 'attributes')
+# - An element's attributes are accessed using .attrib['attrib-name']
+# - Use the element's .text field to get data outside of attributes (e.g. a route's list of links)
+# - Every element can be iterated on to get its children (e.g. the plan's activities and legs)
+# - Emits person even if that person has no plans
+
+# for person, plan in plans_generator:
+
+#     # do stuff with this plan, e.g.
+#     work_activities = filter(
+#         lambda e: e.tag == 'activity' and e.attrib['type'] == 'w',
+#         plan)
+
+#     print('person', person.attrib['id'], 'selected plan w/', len(list(work_activities)), 'work-act')
+#     # activities.append(num_activities)
+
+# person 1 selected plan w/ 2 work-act
+# person 10 selected plan w/ 1 work-act
+# person 100 selected plan w/ 1 work-act
+# ...

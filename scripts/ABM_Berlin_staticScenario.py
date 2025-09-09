@@ -47,6 +47,7 @@ plans_path = 'berlin_data_matsim/berlin-v6.4.output_plans.xml.gz'
 NO2_annual_raster_Berlin = "berlin_data_aq/NO2_2023_epsg3035_clipBerlin.tif"
 berlin_outline = "berlin_data_shapes/Berlin_Bezirke_dissolve.gpkg"
 
+
 # prompt: from the plans_path file can you extract how many people (Agents) are in the scenario?
 
 # Stream through a MATSim plans file.
