@@ -161,6 +161,8 @@ print("Creating final dataframes")
 
 commute_df["NO2_home"] = home_vals
 commute_df["NO2_work"] = work_vals
+commute_df["NO2_workday"] = commute_df["NO2_work"]*1/3+commute_df["NO2_home"]*2/3
+commute_df["deviation"]=commute_df["NO2_home"]/(commute_df["NO2_work"]*1/3+commute_df["NO2_home"]*2/3)*100-100
 
   
 commute_df["Dist_commute_m"] = np.sqrt((commute_df["home_lon"] - commute_df["work_lon"])**2 + (commute_df["work_lat"] - commute_df["work_lat"])**2)

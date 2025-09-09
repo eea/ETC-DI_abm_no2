@@ -99,11 +99,11 @@ axes[1].set_xlabel("NO2 concentration", fontsize=12)
 axes[1].set_ylabel("Frequency", fontsize=12)
 axes[1].set_ylim(0, 30000)  
 
-sns.histplot(agent_df["NO2_home"]-(agent_df["NO2_work"]*1/3+agent_df["NO2_home"]*2/3), bins=12, kde=True, color="skyblue", edgecolor="black", ax=axes[2])
+sns.histplot(agent_df["NO2_home"]/(agent_df["NO2_work"]*1/3+agent_df["NO2_home"]*2/3)*100-100, bins=20, kde=True, color="skyblue", edgecolor="black", ax=axes[2])
 
 # Labels
 axes[2].set_title("Differences home-workday", fontsize=14, fontweight="bold")
-axes[2].set_xlabel("NO2 concentration", fontsize=12)
+axes[2].set_xlabel("NO2 concentration changes in %", fontsize=12)
 axes[2].set_ylabel("Frequency", fontsize=12)
 axes[2].set_ylim(0, 30000)  
 
