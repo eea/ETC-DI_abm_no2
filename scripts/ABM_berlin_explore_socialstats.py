@@ -84,4 +84,5 @@ axes[1][2].set_xlabel("Car availibility", fontsize=12)
 axes[1][2].set_ylabel("Percentage", fontsize=12)
 axes[1][2].set_ylim(0, 100)  
 
-agent_df_export=agent_df[""]
+agent_df_export=agent_df[["person_id", "age", "economic_status", "employed", "employment", "household_size", "income", "sex"]].copy()
+agent_df_export.to_csv(base_folder+ "berlin_output/agent_socio-economic_stats_short.csv", index=False)
