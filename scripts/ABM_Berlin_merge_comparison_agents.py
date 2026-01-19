@@ -47,27 +47,35 @@ plot_switch=False
 
 base_folder         = "Z:/Environment and Health/Air Quality/abm_no2/"
 
-agent_info_path     = "berlin_output/agent_locations_no2_v2.csv"
-agent_info_path2     = "berlin_output/commute_summary.csv"
+agent_info_path     = "berlin_output/agent_locations_no2.csv"
+# agent_info_path2     = "berlin_output/commute_summary.csv"
+# agent_info_path2     = "berlin_output/commute_summary.csv"
+agent_info_path2    = "berlin_output/agent_socio-economic_stats_short.csv"
+
 
 df1=pd.read_csv(base_folder+agent_info_path)
 df2=pd.read_csv(base_folder+agent_info_path2)
 
+df1_id_str="person_id"
+df1_id_str="agent_id"
+# df2_id_str="agent_id"
+df2_id_str="person_id"
+
 # Step 1: Harmonize the IDs in df1
-df1['person_id'] = df1['person_id'].apply(
+df1[df1_id_str] = df1[df1_id_str].apply(
     lambda x: x if str(x).startswith('bb_') else str(x).replace('berlin_', 'bb_', 1)
 )
-df2['agent_id'] = df2['agent_id'].apply(
+df2[df2_id_str] = df2[df2_id_str].apply(
     lambda x: x if str(x).startswith('bb_') else str(x).replace('berlin_', 'bb_', 1)
 )
 
 
-overlap = pd.merge(df1[['person_id']], df2[['agent_id']],
-                   left_on='person_id', right_on='agent_id', how='inner')
+overlap = pd.merge(df1[[df1_id_str]], df2[[df2_id_str]],
+                   left_on=df1_id_str, right_on=df2_id_str, how='inner')
 
 # Unique IDs
-unique_in_df1 = df1[~df1['person_id'].isin(df2['agent_id'])]
-unique_in_df2 = df2[~df2['agent_id'].isin(df1['person_id'])]
+unique_in_df1 = df1[~df1[df1_id_str].isin(df2[df2_id_str])]
+unique_in_df2 = df2[~df2[df2_id_str].isin(df1[df1_id_str])]
 
 print(f"Number of overlapping IDs: {len(overlap)}")
 print(f"Number of unique IDs in df1: {len(unique_in_df1)}")
