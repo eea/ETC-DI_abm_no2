@@ -27,15 +27,16 @@ print(inspect_plans_schema(base_folder+plans_path, max_people=3))
 print(inspect_events_schema(base_folder+events_path, max_events=5000))
 
 
-planned = extract_planned_commutes(base_folder+plans_path, network_path=base_folder+network_path, all_occurrences=False)
+# planned = extract_planned_commutes(base_folder + plans_path, network_path=base_folder+network_path, all_occurrences=False)
+planned = extract_planned_commutes(base_folder + plans_path, base_folder + network_path, allow_intermediate=True)
+
 realized = extract_realized_commutes(base_folder+events_path, plans_path=base_folder+plans_path, network_path=base_folder+network_path)
 
 print("planned rows:", len(planned))
 print("realized rows:", len(realized))
 
-save_csv(planned, "planned_commutes.csv")
-save_csv(realized, "realized_commutes.csv")
-
+save_csv(planned, "planned_commutes_v2.csv")
+save_csv(realized, "realized_commutes_v2.csv")
 
 # print("Extract Planned commutes from the selected plan per person")
 # # 1) Planned commutes from the selected plan per person

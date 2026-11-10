@@ -49,7 +49,7 @@ plot_image=False
 base_folder = "Z:/Environment and Health/Air Quality/abm_no2/"
 
 agent_info_path     = "berlin_output/agent_locations_no2_v2_timevar.csv"
-agent_socio_path    = "berlin_output/agent_socio-economic_stats_short.csv"
+agent_socio_path    = "berlin_output/agent_socio-economic_stats.csv"
 
 agent_df = pd.read_csv(base_folder+agent_info_path)
 socio_df = pd.read_csv(base_folder+agent_socio_path)

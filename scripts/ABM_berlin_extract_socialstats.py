@@ -174,4 +174,4 @@ print(agents.head())
 # save_csv(planned, "planned_commutes.csv")
 # save_csv(realized, "realized_commutes.csv")
 
-agents.to_csv(base_folder+ "berlin_output/agent_socio-economic_stats.csv", index=False)
+# agents.to_csv(base_folder+ "berlin_output/agent_socio-economic_stats.csv", index=False)
